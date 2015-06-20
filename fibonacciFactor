@@ -1,0 +1,48 @@
+int main()
+{
+    unsigned long int p,q,n;
+    unsigned long int count=0,t=0,a=0,b=1,c=0;
+    
+   
+    
+    scanf("%d",&t);
+
+    while(t!=0)
+    {
+        t--;
+        scanf("%d",&n);
+        
+        if(n%2==0)
+        {
+            printf("2 2\n");
+        }
+        else
+        {
+        for(q=3;q<=n;q=q+2)
+        {
+            if(n%q==0)
+            {
+                ++count;
+                if(count==1)
+                {
+                     while(c<=n)
+                        {
+                            c=a+b;
+                            a=b;
+                            b=c;
+                            if(c%q==0)
+                             {
+                            printf("%d %d\n",c,q);
+                                 break;
+                              }
+                        }
+                }
+            }
+        }
+    }
+        a=0;
+        b=1;
+        count=0;
+    }
+    return 0;
+}
