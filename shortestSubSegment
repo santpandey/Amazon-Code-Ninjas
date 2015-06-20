@@ -1,0 +1,646 @@
+import java.util.ArrayList;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import javax.print.attribute.standard.Finishings;
+
+
+public class Sub_Segment {
+
+	
+	public static int calculate(int a[][] ,int b,int secondSize,List<Integer> c)
+	{
+		int min = 200000;
+		int k = 0;
+		int size = c.size();
+		int total = 0;
+		int marker = 0;
+		int avg = 0;
+		// Code to calculate the appropriate avg
+		//System.out.println("List is "+c);
+		while (k < c.size())
+		{
+			avg = avg + c.get(k);
+			k++;
+		}
+		avg = avg/size;
+		
+		//System.out.println("Average is " +avg);
+		
+		k = 0;
+		
+		for(int i = b ; i > 0 ; i--)    //int i = b ; b > 1;i++   //int j = 0 ; j < secondSize; j ++
+		{
+			for(int j = 0 ; j < secondSize; j ++)
+			{
+				if(a[j][i]!=-1)
+				{
+					//System.out.println("Element is "+a[j][i]);
+					/*while(k < size)
+					{*/
+						total = avg - a[j][i];
+						//System.out.println("Total is "+total+ " "+avg);
+						total = (total > 0) ?  avg - a[j][i] : a[j][i] - avg ;
+						//k++;
+						//System.out.println("Total is "+total);
+					
+					
+					if(total < min)
+					{
+						//System.out.println("Control came here"+a[j][i]);
+						min = total;
+						marker = a[j][i];
+						
+					}
+					if(total==min)
+					{
+						min = total;
+						marker = a[j][i];
+					}
+					
+				total = 0;	
+				}
+				total = 0;
+				k = 0;
+			}
+			//System.out.println("Marker to send to the list is "+marker);
+			return marker;
+			
+		}
+		
+		return marker;
+	}
+	
+	
+	
+		
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Scanner s = new Scanner(System.in);
+	
+		
+		ArrayList<String> Firstinput = new ArrayList<String>();
+		
+		ArrayList<String> Secondinput = new ArrayList<String>();
+		
+		String pattern = "\\s+";
+		
+		String input = s.nextLine();
+		
+		input = input.replaceAll("[\\.,+-?:;=`~{}]", "");
+		input = input.replaceAll("[0-9]", "");
+		//input = input.replaceAll("\\s+", "");
+		
+		for(String token : input.split(pattern))
+		{
+			Firstinput.add(token);
+		}
+		
+		
+		//System.out.println("Enter no. of inputs");
+		
+		int noOfInputs = s.nextInt();
+		
+		String tempSecondInput = "";
+		
+		//System.out.println("Enter the words");
+		
+		for(int i = 0 ; i < noOfInputs ; i++)
+		{
+			tempSecondInput = s.next();
+			Secondinput.add(tempSecondInput);
+		}
+		
+		
+		int FirstInputSize = Firstinput.size();
+		int SecondInputSize = Secondinput.size();
+	//System.out.println("Second Input is "+Secondinput);
+		int countForDuplicate = 0;
+		ArrayList<Integer> elementsToBeRemoved = new ArrayList<>();
+		for(int i = 0 ; i < Secondinput.size() ; i++)
+		{
+			for(int j = 0 ; j < Secondinput.size() ; j++)
+			{
+				if(i!=j && Secondinput.get(i).equalsIgnoreCase(Secondinput.get(j)) && j>i)
+				{
+					countForDuplicate++;
+					//System.out.println("Removed Element will be "+Secondinput.get(j));
+					//System.out.println("I is "+ i + "and J is "+j);
+					elementsToBeRemoved.add(j);
+					break;
+					//Secondinput.remove(j);
+					//SecondInputSize = SecondInputSize - 1;
+					//System.out.println("Second Input Size is "+SecondInputSize);
+				}
+			}
+			
+		}
+		//System.out.println("Elemets to be removed are "+elementsToBeRemoved);
+		Collections.sort(elementsToBeRemoved);
+		for(int k = 0 ; k < elementsToBeRemoved.size();k++)
+		{
+			Secondinput.remove((int)elementsToBeRemoved.get(k));
+			for(int o = k+1 ; o < elementsToBeRemoved.size();o++)
+			{
+				elementsToBeRemoved.set(o, (Integer)elementsToBeRemoved.get(o) - 1);
+			}
+			//System.out.println("Second Input is "+Secondinput);
+			//System.out.println("Elements to be removed are "+elementsToBeRemoved);
+		}
+		
+		//System.out.println("Second Input is "+Secondinput);
+		
+		/*System.out.println("Elements to be removed are ");
+		
+			System.out.println(elementsToBeRemoved);
+		
+		
+		for(int i = 0 ; i < elementsToBeRemoved.size();i++)
+		{
+			Secondinput.remove(elementsToBeRemoved.get(i));
+		}*/
+		SecondInputSize = Secondinput.size();
+		//System.out.println("NOW TELL ME, FINAL SECOND INPUT SIZE IS "+SecondInputSize);
+		//int[][] matrix = new int [SecondInputSize][FirstInputSize];
+		
+		
+		
+		
+		
+		
+		
+		int[][] finalResult = new int [FirstInputSize][SecondInputSize];
+				int count = 0;
+				int newcount = 0;
+				
+		for(int i = 0 ; i < FirstInputSize ; i++)
+		{
+			for(int j = 0 ; j < SecondInputSize ; j++)
+			{
+				if(Firstinput.get(i).equalsIgnoreCase(Secondinput.get(j)))
+				{
+					finalResult[i][j] = i;
+					newcount++;
+				}
+				else
+				{
+					finalResult[i][j] = -1;
+					count++;
+					
+				}
+			}
+		}
+		
+		if(newcount==FirstInputSize)
+		{
+			for(int i = 0 ; i < FirstInputSize ; i++)
+			{
+				System.out.print(Firstinput.get(i)+" ");
+			}
+		}
+		
+		else {	
+		int countForSecondInput = 0;
+		int finalSecondInputSize = SecondInputSize;
+		
+		List elementForSkipping= new ArrayList();
+		
+		for(int i = 0 ; i < SecondInputSize ; i++)
+		{
+			for(int j = 0 ; j < FirstInputSize ; j++)
+			{
+				if(finalResult[j][i]==-1)
+				{
+					countForSecondInput++;
+				}
+			}
+			if(countForSecondInput==FirstInputSize)
+			{
+				//finalSecondInputSize = finalSecondInputSize + 1;
+				//Secondinput.remove(i);
+				elementForSkipping.add(i);
+				//Secondinput.remove(i);
+				//SecondInputSize = SecondInputSize - 1;
+			}
+			countForSecondInput=0;
+		}
+	
+		//System.out.println("Elemet for skipping is "+elementForSkipping);
+		
+		for(int i = 0; i < elementForSkipping.size() ;i++)
+		{
+			//System.out.println("I came here");
+			Secondinput.remove((int)elementForSkipping.get(i));
+			//elementForSkipping.remove((int)i);
+			//System.out.println(Secondinput);
+			for(int j = 0 ; j < elementForSkipping.size();j++)
+			{
+				elementForSkipping.set(j, (int)elementForSkipping.get(j)-1);
+			}
+			//System.out.println("Elements for Skipping are "+elementForSkipping);
+		}
+		
+		//SecondInputSize = SecondInputSize - elementForSkipping.size();
+		//System.out.println("Second input is "+Secondinput);
+		/*System.out.println("Final Result is");
+		for(int i = 0 ; i < FirstInputSize ; i++)
+		{
+			for(int j = 0 ; j < SecondInputSize ; j++)
+			{
+				System.out.print(finalResult[i][j]+" ");
+			}
+			System.out.println();
+		}*/
+		
+		int SecondInputSizeForRepeated = Secondinput.size();
+			//SecondInputSize = SecondInputSize - elementForSkipping.size();
+			int[][] finalResultDone = new int [FirstInputSize][SecondInputSize];
+		
+		
+			//System.out.println("Second Input size is "+SecondInputSize);
+			
+		
+		//System.out.println("Second input is "+Secondinput);	
+		
+			//TreeMap<Integer,Integer> mapForSorting = new TreeMap<>();
+			
+			//ArrayList<Integer> minimumForArray = new ArrayList<>();
+			
+		if(count == FirstInputSize*SecondInputSize)
+		{
+			System.out.println("NO SUBSEGMENT FOUND");
+		}
+		
+		else
+		{
+		//Sorting the Array in the horizintal as well as Vertical direction
+	
+			//System.out.println("Control did come here");
+			
+		TreeMap<Integer,Integer> mapForSorting = new TreeMap<>();
+		
+		ArrayList<Integer> minimumForArray = new ArrayList<>();
+		
+		/*for(int i = 0 ; i < FirstInputSize  ; i++)			//SecondInputSize
+		{
+			for(int j = 0 ; j < SecondInputSize ; j++)
+			{
+				System.out.print(finalResult[i][j]+" ");
+			}
+			System.out.println();
+		}*/
+		
+		//System.out.println("Final Second Input Size and Second Input Size is "+finalSecondInputSize+ " "+SecondInputSize);
+		
+		
+			for(int i = 0 ; i < SecondInputSize ; i++)
+			{
+				for(int j = 0 ; j < FirstInputSize ; j++)
+				{
+					if(finalResult[j][i]!=-1)
+					{
+						minimumForArray.add(finalResult[j][i]);
+						mapForSorting.put(finalResult[j][i],i);
+						break;
+					}
+				}
+			}
+		
+			
+		
+		
+		
+		Collections.sort(minimumForArray);
+		
+		//System.out.println("Map is "+mapForSorting);
+		
+		/*for(int i = 0 ; i < SecondInputSize ; i++)
+		{
+			for(int j = 0 ; j < FirstInputSize ; j++)
+			{
+				finalResultDone[j][i]=-1;
+			}
+		}
+		*/
+		// Final Orientation of the array
+		/*System.out.println(minimumForArray);
+		System.out.println(finalSecondInputSize);*/
+
+		
+		
+		//System.out.println("Elements for Skipping is "+elementForSkipping);
+		
+		if(elementForSkipping.size()!=0)
+		{
+			
+			for(int i = 0; i < elementForSkipping.size();i++)
+			{
+				Secondinput.remove(elementForSkipping.get(i));
+			}
+			
+			//Secondinput.remove(3);
+			
+			//System.out.println("Final Second Input is "+Secondinput);
+			
+			int size = mapForSorting.size();
+			
+			//System.out.println("Size is "+size);
+			
+			for(int j = 0 ; j < FirstInputSize ; j++)
+				{
+					for(int k = 0 ; k < size; k ++)
+					{
+						finalResultDone[j][k] = -1;
+					}
+					
+				}
+			
+			
+			//System.out.println("Size of map is "+size);
+			int[] myList = new int[size];
+			for(int i = 0 ; i < size;i++)
+			{
+				myList[i] = (int)mapForSorting.get(minimumForArray.get(i));
+				//myList[i] = (minimumForArray.get(i));
+			}
+			//System.out.println("Minimum array is "+minimumForArray);
+			//System.out.println("My List is ");
+			/*for(int i = 0 ; i < size;i++)
+			{
+				System.out.print(myList[i]+" ");
+			}*/
+		//System.out.println("Final Result Done is ");
+			for(int i = 0 ; i < size ; i++)		//size
+			{
+				for(int j = 0 ; j < FirstInputSize ; j++)
+				{
+					finalResultDone[j][i] = finalResult[j][myList[i]];
+					//System.out.print(finalResultDone[j][i] +" ");
+				}
+				//System.out.println();
+			}
+		}
+		else
+		{
+			for(int i = 0 ; i < finalSecondInputSize ; i++)
+			{
+				for(int j = 0 ; j < FirstInputSize ; j++)
+				{
+					finalResultDone[j][i] = finalResult[j][mapForSorting.get(minimumForArray.get(i))];
+				}
+			}
+		}
+		
+		
+		if(elementForSkipping.size()==0)
+		{
+			int firstIndex = 0;
+			int lastIndex = 0;
+			int k = SecondInputSize-2;
+			//System.out.println("Control did come here");
+			if(elementForSkipping.size()>0)
+			{
+				k = k - elementForSkipping.size();
+			}
+			else
+			{
+				k = SecondInputSize-2;
+			}
+			//System.out.println("K is "+k);
+			int min = 200000;
+			int calculatedMin = 0;
+			
+			//ArrayList declared to find the entries
+			ArrayList<Integer> listToAppend = new ArrayList<Integer>();
+			
+			int finalFirstIndex = 200000;
+			int finalLastIndex = 200000;
+			int finalRange = 200000;
+			
+			for(int i = 0 ; i < FirstInputSize ; i++)
+			{
+				if(finalResultDone[i][0]!=-1)
+				{
+					for(int j = 0 ; j < FirstInputSize ; j++)
+					{
+						if(finalResultDone[j][finalSecondInputSize-1]!=-1)
+						{
+							calculatedMin = finalResultDone[j][finalSecondInputSize-1] - finalResultDone[i][0];
+							
+							calculatedMin = calculatedMin > 0 ? finalResultDone[j][finalSecondInputSize-1] - finalResultDone[i][0] : finalResultDone[i][0] - finalResultDone[j][finalSecondInputSize-1];
+							
+							if(calculatedMin <= min)
+							{
+								min = calculatedMin;
+								firstIndex = finalResultDone[i][0];
+								lastIndex = finalResultDone[j][finalSecondInputSize-1];
+								//System.out.println("First Index is "+firstIndex);
+								//System.out.println("LastIndex is "+lastIndex);
+								listToAppend.add(firstIndex);
+								listToAppend.add(lastIndex);
+								//System.out.println("List to append before function call is "+listToAppend);
+								while(k>0)
+								{
+									listToAppend.add(calculate(finalResultDone,k,FirstInputSize,listToAppend));
+									k--;
+								}
+								
+								k = listToAppend.size()-1;
+								
+								Collections.sort(listToAppend);
+								//System.out.println("List to append is "+listToAppend);
+							
+								if(listToAppend.get(listToAppend.size()-1) - listToAppend.get(0) < finalRange)
+								{
+									finalRange = listToAppend.get(listToAppend.size()-1) - listToAppend.get(0);
+									finalFirstIndex = listToAppend.get(0);
+									finalLastIndex = listToAppend.get(listToAppend.size()-1);
+									//System.out.println(finalFirstIndex + " "+finalLastIndex);
+								}
+								else if(listToAppend.get(listToAppend.size()-1) - listToAppend.get(0) == finalRange)
+								{
+									if(listToAppend.get(0) < finalFirstIndex)
+									{
+										finalRange = listToAppend.get(listToAppend.size()-1) - listToAppend.get(0);
+										finalFirstIndex = listToAppend.get(0);
+										finalLastIndex = listToAppend.get(listToAppend.size()-1);
+										//System.out.println(finalFirstIndex + " "+finalLastIndex);
+									}
+								}							
+								while(k>=0)
+								{
+									listToAppend.remove(k);
+									k--;
+								}
+								
+								k = SecondInputSize-2;
+							}
+								
+						}
+					}
+				}
+			}
+			
+			//System.out.println(finalFirstIndex);
+			//System.out.println(finalLastIndex);
+				for(int i = finalFirstIndex ; i <= finalLastIndex ; i++)
+					System.out.print(Firstinput.get(i)+" ");
+			//}
+			//else
+				
+		}
+		else
+		{
+				
+			//System.out.println("Size for map is ");
+			//System.out.println("Map is "+mapForSorting);
+			//System.out.println("Control did come here for skipping elemt greater than 0");
+			//int sizeForMissing = Secondinput.size();
+			int sizeForMissing = mapForSorting.size();
+			//System.out.println("Second Input Size is "+SecondInputSize);
+			//sizeForMissing = sizeForMissing - countForDuplicate;
+			//System.out.println("Sze for missing is "+sizeForMissing);
+			int[][] finalResultDone1 = new int [FirstInputSize][sizeForMissing];
+			//System.out.println("First Input size is "+FirstInputSize);
+			//System.out.println("Final Result Done one is");
+			
+			//System.out.println("Santosh idea to know is");
+			
+			/*for(int i = 0 ; i < FirstInputSize ; i++)     //mapForSorting.size()
+			{
+				for(int j = 0 ; j < mapForSorting.size() ; j++)
+				{
+					System.out.print(finalResultDone[i][j] +" ");
+				}
+				System.out.println();
+			}
+			*/
+			
+			/*for(int i = 0 ; i < mapForSorting.size() ; i++)     //mapForSorting.size()
+			{
+				for(int j = 0 ; j < FirstInputSize ; j++)
+				{
+					finalResultDone1[j][i] = finalResultDone[j][i];
+					System.out.print(finalResultDone1[i][j]+" ");
+				}
+				System.out.println();
+			}
+			*/
+			
+			
+			int firstIndex = 0;
+			int lastIndex = 0;
+			int k = sizeForMissing-2;
+			
+			/*if(elementForSkipping.size()>0)
+			{
+				k = k - elementForSkipping.size();
+			}
+			else
+			{
+				k = SecondInputSize-elementForSkipping.size()-1-2;
+			}*/
+			//System.out.println("K is "+k);
+			int min = 200000;
+			int calculatedMin = 0;
+			
+			//ArrayList declared to find the entries
+			ArrayList<Integer> listToAppend = new ArrayList<Integer>();
+			
+			int finalFirstIndex = 200000;
+			int finalLastIndex = 200000;
+			int finalRange = 200000;
+			
+			for(int i = 0 ; i < FirstInputSize ; i++)
+			{
+				if(finalResultDone[i][0]!=-1)
+				{
+					for(int j = 0 ; j < FirstInputSize ; j++)
+					{
+						if(finalResultDone[j][sizeForMissing-1]!=-1)
+						{
+							calculatedMin = finalResultDone[j][sizeForMissing-1] - finalResultDone[i][0];
+							
+							calculatedMin = calculatedMin > 0 ? finalResultDone[j][sizeForMissing-1] - finalResultDone[i][0] : finalResultDone[i][0] - finalResultDone[j][sizeForMissing-1];
+							
+							//System.out.println("Calculated min is "+calculatedMin);
+							
+							if(calculatedMin <= min)
+							{
+								min = calculatedMin;
+								firstIndex = finalResultDone[i][0];
+								lastIndex = finalResultDone[j][sizeForMissing-1];
+								//System.out.println("First Index is "+firstIndex);
+								//System.out.println("LastIndex is "+lastIndex);
+								listToAppend.add(firstIndex);
+								listToAppend.add(lastIndex);
+								//System.out.println("List to append before function call is "+listToAppend);
+								//System.out.println("K is "+k);
+								while(k>0)
+								{
+									listToAppend.add(calculate(finalResultDone,k,FirstInputSize,listToAppend));
+									k--;
+								}
+								
+								k = listToAppend.size()-1;
+								
+								Collections.sort(listToAppend);
+								//System.out.println("List to append is "+listToAppend);
+							
+								if(listToAppend.get(listToAppend.size()-1) - listToAppend.get(0) < finalRange)
+								{
+									finalRange = listToAppend.get(listToAppend.size()-1) - listToAppend.get(0);
+									finalFirstIndex = listToAppend.get(0);
+									finalLastIndex = listToAppend.get(listToAppend.size()-1);
+									//System.out.println(finalFirstIndex + " "+finalLastIndex);
+								}
+								else if(listToAppend.get(listToAppend.size()-1) - listToAppend.get(0) == finalRange)
+								{
+									if(listToAppend.get(0) < finalFirstIndex)
+									{
+										finalRange = listToAppend.get(listToAppend.size()-1) - listToAppend.get(0);
+										finalFirstIndex = listToAppend.get(0);
+										finalLastIndex = listToAppend.get(listToAppend.size()-1);
+										//System.out.println(finalFirstIndex + " "+finalLastIndex);
+									}
+								}							
+								while(k>=0)
+								{
+									listToAppend.remove(k);
+									k--;
+								}
+								
+								//k = SecondInputSize-elementForSkipping.size()-2;
+								k = sizeForMissing-2;
+
+							}
+								
+						}
+					}
+				}
+			}
+			
+			//System.out.println(finalFirstIndex);
+			//System.out.println(finalLastIndex);
+				for(int i = finalFirstIndex ; i <= finalLastIndex ; i++)
+					System.out.print(Firstinput.get(i)+" ");
+			//}
+			//else
+		}
+			
+		
+			
+		}
+	}
+	}
+}
+
+
